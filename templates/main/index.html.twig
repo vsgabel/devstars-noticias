@@ -9,7 +9,7 @@
     {% for noticia in noticias %}
     <div class="row">
         <div class="col-sm-12">
-            <a href=""><h2>{{ noticia.titulo }}</h2></a>
+            <a href="{{ url('noticia', {'id': noticia.id}) }}"><h2>{{ noticia.titulo }}</h2></a>
             <h4>{{ noticia.subtitulo }}</h2>
         </div>
     </div>
