@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}DevNews{% endblock %}
+
+{% block body %}
+<div class="row text-center">
+    <h1>{{ noticia.titulo }}</h1>
+    <h2>{{ noticia.subtitulo }}</h2>
+    <p><i>Por <b>anônimo</b> em {{ noticia.data.format("d/m/Y H:i") }}</i></p>
+</div>
+<div class="row">
+    {{ noticia.conteudo }}
+</div>
+{% endblock %}
