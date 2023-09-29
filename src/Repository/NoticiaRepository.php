@@ -31,6 +31,17 @@ class NoticiaRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findNoticia(string $q): array
+    {
+        return $this->createQueryBuilder('n')
+                    ->where("n.titulo LIKE :q")
+                    ->setParameter("q", "%".$q."%")
+                    ->orderBy('n.data', 'DESC')
+                    ->getQuery()
+                    ->getResult()
+            ;
+    }
+
 //    /**
 //     * @return Noticia[] Returns an array of Noticia objects
 //     */

@@ -29,6 +29,9 @@ class Noticia
     #[ORM\Column]
     private ?bool $premium = null;
 
+    #[ORM\ManyToOne(inversedBy: 'noticias')]
+    private ?User $autor_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +93,18 @@ class Noticia
     public function setPremium(bool $premium): static
     {
         $this->premium = $premium;
+
+        return $this;
+    }
+
+    public function getAutorId(): ?User
+    {
+        return $this->autor_id;
+    }
+
+    public function setAutorId(?User $autor_id): static
+    {
+        $this->autor_id = $autor_id;
 
         return $this;
     }

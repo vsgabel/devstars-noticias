@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Noticia;
 use App\Form\NoticiaType;
 use App\Repository\NoticiaRepository;
+use App\Repository\ClimaRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,10 +16,11 @@ use Doctrine\ORM\EntityManagerInterface;
 class MainController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(NoticiaRepository $nr): Response
+    public function index(NoticiaRepository $nr, ClimaRepository $cr): Response
     {
+        $clima = $cr->findLast();
         $noticias = $nr->findReverse();
-        return $this->render('main/index.html.twig', ["noticias"=>$noticias]);
+        return $this->render('main/index.html.twig', ["noticias"=>$noticias, "clima" => $clima]);
     }
 
     #[Route("/nova", name: 'nova_noticia')]
@@ -53,6 +55,9 @@ class MainController extends AbstractController
     public function noticia(int $id, NoticiaRepository $nr): Response
     {
         $noticia = $nr->find($id);
+        if ($noticia->isPremium()) {
+            $this->denyAccessUnlessGranted("ROLE_PREMIUM");
+        }
         return $this->render("main/noticia.html.twig", ["noticia" => $noticia]);
     }
 }

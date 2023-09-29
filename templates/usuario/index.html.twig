@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UsuarioController!{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-sm-12">
+        <h1>Área do Usuário</h1>
+    </div>
+
+    <table class="table">
+        <tr>
+            <td>Nome</td>
+            <td>{{ app.user.nome }}</td>
+        </tr>
+        <tr>
+            <td>Sobrenome</td>
+            <td>{{ app.user.sobrenome }}</td>
+        </tr>
+        <tr>
+            <td>E-mail</td>
+            <td>{{ app.user.email }}</td>
+        </tr>
+        <tr>
+            <td>Tipo de Cadastro</td>
+            {% if app.user.roles[0] == "ROLE_JORNALISTA" %}
+            <td>Jornalista</td>
+            {% elseif app.user.roles[0] == "ROLE_ADMIN" %}
+            <td>Administrador</td>
+            {% elseif app.user.roles[0] == "ROLE_PREMIUM" %}
+            <td>Usuário Premium</td>
+            {% else %}
+            <td>Usuário Gratuito</td>
+            {% endif %}
+        </tr>
+    </table>
+</div>
+<div class="row text-center justify-content-center">
+    <div class="col-sm-12">
+        {% if app.user.roles[0] == "ROLE_USER" %}
+        <a href="{{ url('premium') }}" class="btn btn-primary">Vire Premium</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

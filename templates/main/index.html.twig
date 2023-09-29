@@ -6,17 +6,55 @@
     <div class="row text-center">
         <h1>DevNews</h1>
     </div>
-    {% for noticia in noticias %}
-    <div class="row">
-        <div class="col-sm-12">
-            <a href="{{ url('noticia', {'id': noticia.id}) }}"><h2>{{ noticia.titulo }}</h2></a>
-            <h4>{{ noticia.subtitulo }}</h2>
-        </div>
+    <div class="row justify-content-center">
+        <p>Previsão do Tempo em Ouagadougou: {{ clima.getTemperature() }}° C</p>
     </div>
-    <div class="row">
-        <div class="col-sm-6">
-            {{ noticia.data.format("H:i d/m/Y") }}
-            Por <b>anônimo</b>
+    <div id="noticias">
+        {% for noticia in noticias %}
+        <div class="row">
+            <div class="col-sm-12">
+                <a href="{{ url('noticia', {'id': noticia.id}) }}"><h2>{{ noticia.titulo }}</h2></a>
+                <h4>{{ noticia.subtitulo }}</h2>
+            </div>
         </div>
-    {% endfor %}
+        <div class="row">
+            <div class="col-sm-6">
+                {{ noticia.data.format("H:i d/m/Y") }}
+                Por <b>{{ noticia.getAutorId() }}</b>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        $("#form_busca").submit(
+            function (event) {
+                event.preventDefault();
+                $.get("/api/busca?q="+$("#text_busca").val(), function (dados, status) {
+                    let content = "";
+                    dados.forEach(
+                        function (item) {
+                            content += 
+                            `
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <a href="/noticia/`+item['id']+`"><h2>`+item['titulo']+`</h2></a>
+                                    <h4>`+item['subtitulo']+`</h2>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                     `+item['data']+`
+                                    Por <b>`+item['autorId']['nome']+" "+item['autorId']['sobrenome']+`</b>
+                                </div>
+                            </div>
+                            `
+                        }
+                    )
+                    
+                    $("#noticias").html(content);
+                })
+            }
+        );
+    </script>
 {% endblock %}
